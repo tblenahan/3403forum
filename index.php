@@ -1,3 +1,21 @@
+<?php
+session_start();
+$status = $_REQUEST['status'] ?? null;
+$psw = $_POST['psw'];
+
+//users input password must match this
+$coolPasswordToTestAgainst = "12Pa$$$$";
+
+
+
+if($psw == $coolPasswordToTestAgainst){
+    $_SESSION['loggedin'] = true;
+}
+
+echo $_SESSION['loggedin'];
+
+
+?>
 <!doctype html>
 <html lang="en">
 
@@ -15,6 +33,26 @@
 
 <body>
 
+    <!-- successful registration modal -->
+    <div class="modal fade" id="successModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Thank you for registering!</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            Thank you for registering for the CIRES Mentoring Program. You should receive an email shortly confirming your participation.  If you do not receive an email within 5 minutes, please contact ciresmentoring@colorado.edu
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+        </div>
+    </div>
+    </div>
+
     <!-- login modal -->
     <div id="login" class="modal" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
@@ -26,7 +64,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form>
+                    <form id="login-form" method="post">
                         <div class="form-group">
                             <label for="exampleInputEmail1">Email address</label>
                             <input type="email" class="form-control" id="exampleInputEmail1"
@@ -34,11 +72,14 @@
                             <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone
                                 else.</small>
                         </div>
+                        <div id="psw-login-alert" class="alert alert-warning" role="alert" style="display: none;">
+                            Your password must meet the requirements.
+                        </div>
                         <div class="form-group">
                             <label for="exampleInputPassword1">Password</label>
-                            <input type="password" class="form-control" id="exampleInputPassword1">
+                            <input name="psw" type="password" class="form-control" id="exampleInputPassword1">
                         </div>
-                        <button type="submit" id="login-submit" class="btn btn-success">Login</button>
+                        <button onclick="ifLoginValidSubmit()" class="btn btn-success">Login</button>
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -68,7 +109,7 @@
                             <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone
                                 else.</small>
                         </div>
-                        <div id="psw-alert" class="alert alert-warning" role="alert" style="display: none;">
+                        <div id="psw-reg-alert" class="alert alert-warning" role="alert" style="display: none;">
                             Your password must meet the requirements.
                         </div>
                         <div class="form-group">
@@ -79,7 +120,7 @@
                             <label for="reg-confirmPassword">Password</label>
                             <input type="password" class="form-control" id="reg-confirmPassword">
                         </div>
-                        <button onclick="ifValidSubmit()" class="btn btn-primary">Submit</button>
+                        <button onclick="ifRegValidSubmit()" class="btn btn-primary">Submit</button>
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -255,6 +296,13 @@
 
     <!-- custom javascript -->
     <script src="./index.js"></script>
+
+    <?php 
+        //check if user has successfully registered echo javascript to show the appropriate modal
+        if(isset($status) && $status == "success") {
+            echo '<script type="text/javascript">$(window).on("load",function(){$("#successModal").modal("show");});</script>'; 
+        }
+    ?>
 </body>
 
 </html>

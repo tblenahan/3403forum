@@ -11,7 +11,7 @@ function commentShowHide(postID){
 }
 
 // make sure password has correct characters and matches password confirmation
-function validatePassword() {
+function validateRegPassword() {
     $passwordToMatch = /(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[~!@#$%^&*()_+={}])[a-zA-Z0-9~!@#$%^&*()_+={}]{8,30}/g; // regex to match against password
     $userInput = $("#reg-password").val();
     $confirmPsw = $("#reg-confirmPassword").val();
@@ -21,11 +21,27 @@ function validatePassword() {
     return false;
   }
 
-  function ifValidSubmit() {
-      if(validatePassword()){
-          alert("Success! Your password and email were excepted.");
+  function validateLoginPassword() {
+    $passwordToMatch = /(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[~!@#$%^&*()_+={}])[a-zA-Z0-9~!@#$%^&*()_+={}]{8,30}/g; // regex to match against password
+    $userInput = $("#exampleInputPassword1").val();
+    if($userInput.match($passwordToMatch)) {
+      return true;
+    }
+    return false;
+  }
+
+  function ifRegValidSubmit() {
+      if(validateRegPassword()){
           $("#reg-form").submit();
       }else{
-        $("#psw-alert").css("display", "block");
+        $("#psw-reg-alert").css("display", "block");
       }
   }
+
+  function ifLoginValidSubmit() {
+    if(validateLoginPassword()){
+        $("#login-form").submit();
+    }else{
+      $("#psw-login-alert").css("display", "block");
+    }
+}
